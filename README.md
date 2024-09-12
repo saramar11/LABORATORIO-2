@@ -224,5 +224,101 @@ SNR mic 3: 31.3684748231 dB
 
 Al igual que el caso anterior el SNR de la fuente 3 es superior a los 10 dB, por lo tanto se considera como un valor aceptable en donde hay más información que ruido al comparar las grabaciones de las voces con las del ruido ambiente tomado.
 
-### SEPARACIÓN POR ICA:
+### Separación por ICA:
+
 El **ICA:**  (Independent Component Analysis) se usa ICA para separar las señales mezcladas en componentes independientes, para esto se inicia con la lectura de las señales que se desean separar implementando los tres micrófonos los cuales contienen partes de la señal que se desean recuperar teniendolas en cuenta como señales mezcladas (*Mixed*) para cada uno de los micrófonos.
+
+Para la correcta separación por ICA se decidió aplicar un filtro pasabajos con el fin de eliminar lasa señales con frecuencias muy altas ya que estas distorsionan de gran manera el resultado del audio final haciendo que este saliera con demasiada distorsión con esto en mente se procedió a la implementación del filtro eliminando las frecuencias no deseadas para la posterior separación de audio por ICA. 
+
+[![Filtro.png](https://i.postimg.cc/KYTY17Dp/Filtro.png)](https://postimg.cc/CZF0tqtb)
+ En donde:
+**signal:** La señal de audio que quieres filtrar.
+**cutoff_freq:** La frecuencia de corte del filtro (en Hz).
+**order:** Es el orden del filtro. Cuanto mayor sea el orden, más pronunciada será la pendiente de corte del filtro.
+Seguido a esto se realiza el cálculo de la frecuencia de muestreo por Nyquist para que las frecuencias por encima de la frecuencia de Nyquist se reflejarán en el espectro.
+
+[![nyquist.png](https://i.postimg.cc/m2r2YWSH/nyquist.png)](https://postimg.cc/Jt9L8gvr)
+
+Se realiza la normalización de la frecuencia con el fin de que la frecuencia de corte sea independiente de la frecuencia de muestreo de la señal.
+
+Se implementa el filtro Butterworth mediante la función butter y se utiliza un filtro pasa bajos. Con esto se puede proceder al filtrado de la señal y su correspondiente retorno el cual será la señal señal filtrada con la que se trabajará dentro del ICA.
+
+[![butter.png](https://i.postimg.cc/cLnWhxtr/butter.png)](https://postimg.cc/4YsjNT5g)
+
+[![audiomezclado.png](https://i.postimg.cc/8ccQ6NVk/audiomezclado.png)](https://postimg.cc/hzk5FFjN)
+
+La función **wavfile.read()** carga la señal de audio y su frecuencia de muestreo.
+
+**sample_rate_S1, sample_rate_S2, sample_rate_S3:** Son las frecuencia de muestreo en Hz.
+
+**mixed1, mixed2, mixed3:** Señales de audio en forma de arrays.
+
+**Conversión a mono:** Verifica si la señal es estéreo (si tiene dos canales), y si es así, selecciona uno de los canales (el canal izquierdo en este caso) para convertir la señal a mono. El ICA funciona mejor con señales en mono, por lo que si los archivos de audio son estéreo, es necesario convertirlos.
+
+[![tomono.png](https://i.postimg.cc/RhksZBSD/tomono.png)](https://postimg.cc/zHkSx4RC)
+
+Se aplica el filtro pasa-bajo a cada una de las señales con una frecuencia de corte de 3000 Hz. Esto elimina frecuencias superiores a 3000 Hz, lo que puede ayudar a eliminar ruido de alta frecuencia o información no deseada antes de aplicar ICA.
+
+[![LP.png](https://i.postimg.cc/2jLfrjTT/LP.png)](https://postimg.cc/DmhNcT9b)
+
+Se crea una matriz de observaciones: Matriz** X **en la que cada columna es una señal filtrada **(mixed1_filtered, mixed2_filtered, mixed3_filtered)**.
+Ya que el ICA requiere una matriz de señales observadas donde cada columna representa una grabación (o mezcla). Esta matriz se pasa luego al algoritmo ICA.
+
+#### Implementación de ICA para la separación de fuentes
+
+[![ICA.png](https://i.postimg.cc/gJq8ZbH7/ICA.png)](https://postimg.cc/dk3LbXXR)
+
+Utiliza la función ** FastICA** para separar las mezclas en sus componentes independientes.
+
+- **n_components=3:** Se indica que queremos 3 componentes independientes, ya que tenemos 3 señales de entrada.
+
+- **random_state=0:** Para asegurar la reproducibilidad de los resultados.
+Como resultado **S** Es una matriz con las señales separadas en sus columnas.
+
+#### Normalización de las señales separadas
+
+[![normi.png](https://i.postimg.cc/90QRwRM4/normi.png)](https://postimg.cc/xJBTWdLY)
+
+Se escala la señal para que su valor máximo absoluto sea 32767, lo que es típico en archivos WAV de 16 bits. Se convierten los valores a enteros, los valores normalizados a enteros de 16 bits **(np.int16)**, que es el formato utilizado por archivos WAV.
+
+**Finalmente**, las señales separadas se normalizan y se guardan como archivos de audio WAV y se muestra el mensaje que confirma que las señales fueron correctamente guardadas.
+
+[![writey.png](https://i.postimg.cc/Vvh6SKpT/writey.png)](https://postimg.cc/YL1kZzpf)
+
+
+
+
+
+###SNR de la senal recuperada
+
+Una vez ya se realizó el procedimiento de la separación de la voz mediante la mezcla de los tres audios usando ICA, se utilizó el audio de la fuente en donde se escucha con mayor nitidez una única voz entre las tres personas presentes en la habitación siendo esta *fuente 3* la cual según lo estipulado por el código es el correspondiente al micrófono 3, con el ruido captado desde el inicio con este micrófono *voltajer3*. Cabe resaltar que en esta señal recuperada la voz que se escucha con mayor nitidez corresponde a la persona que inicialmente se considera como **S1** en el esquemático presentado al inicio, lo cual significa que se encontraba al otro lado de la habitación.
+
+Con esto en mente se vuelve a calcular la potencia de cada una de las señales, tanto de la recuperada con la voz de S1 en el micrófono 3 (fuente 3), como la del ruido.
+
+** Línea de código para el cálculo de la potencia de la señal recuperada: **
+
+[![potenreupf.png](https://i.postimg.cc/2SZsN0w6/potenreupf.png)](https://postimg.cc/DS7jqdRk)
+
+**Resultado de la potencia de la señal recuperada** 
+
+[![Potenf3.png](https://i.postimg.cc/hvN2CqN0/Potenf3.png)](https://postimg.cc/kRFN4LJV)
+
+De igual forma, se realizó el mismo procedimiento con la señal del ruido del micrófono 3 que fue utilizado desde el principio del código.
+
+[![potenr3odigo.png](https://i.postimg.cc/nzJjGSdQ/potenr3odigo.png)](https://postimg.cc/kVTgnsPn)
+
+Resultado:
+
+[![potenruido3.png](https://i.postimg.cc/X7Qf7Ws1/potenruido3.png)](https://postimg.cc/Tp5LCzMn)
+
+Con estos valores de potencia fue posible finalmente calcular el SNR de esta señal recuperada en la fuente 3 con respecto al ruido ambiente de este micrófono mediante la ecuación postulada al inicio de este reporte, con la siguiente línea de código que también permite visualizar en valor obtenido en la ventana con cuatro decimales.
+
+[![snrrecuperado.png](https://i.postimg.cc/N07fBs45/snrrecuperado.png)](https://postimg.cc/gwjPKP1W)
+
+Resultado: 
+
+[![valorsnr-recuperado.png](https://i.postimg.cc/T1ZXnF9z/valorsnr-recuperado.png)](https://postimg.cc/jnQ9b8Bc)
+
+
+De este SNR obtenido se aprecia que se encuentra con un valor positivo que indica que hay más información que ruido en este audio, y es superior a 10 dB lo cual como se ha postulado a lo largo del reporte significa que es válida utilizarla. 
+
