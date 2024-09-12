@@ -77,3 +77,115 @@ Obteniendo así la siguiente información correspondiente al audio captado por e
 
 A partir de esto se puede observar que en primera instancia la frecuencia de muestreo de este audio es de 44100 Hz así como se había mencionado anteriormente. También es evidente que los datos de este audio están almacenados en una matriz bidimensional de dos columnas con un total de 1324323 de datos, el hecho de que sea bidimensional implica que este archivo es estéreo, es decir que utiliza dos canales de sonido para crear una sensación de espacialidad en el audio. Sin embargo, para este procesamiento es necesario utilizar únicamente un solo canal, es decir volverlo un audio mono. Para esta finalidad se utilizaron las siguientes líneas de código, así mismo, por medio de mensajes mostrados en la ventana se puede evidenciar si se convirtió de estéreo a mono satisfactoriamente.
 
+Esto que se mostró únicamente con el archivo del sonido 1, se realizó también con los demás archivos tanto de sonido como de ruido de la misma manera con la única diferencia de que se debía de tener en cuenta el nombre para cada uno de ellos. 
+
+### Gráficas de Ruido y Sonido de los micrófonos
+
+Para efectos de practicidad, se estará postulando el ejemplo con el primer sonido y ruido únicamente ya que con los otros sería el mismo procedimiento con la diferencia del archivo con el que se está trabajando. 
+
+Una vez teniendo los audios en el formato *.wav* es necesario leer este archivo dentro del código de Python, por lo que realiza la siguiente línea de código:
+
+[![sample.png](https://i.postimg.cc/L6j1FBxC/sample.png)](https://postimg.cc/rKFmSWXx)
+
+El *wavfile.read(‘S12C.wav’)* Se encarga de tomar el archivo que contiene ese nombre y lo lee para devolver dos valores, los cuales corresponden a la tasa de muestreo y los datos que el audio contiene.
+
+El *sample_rate* hace referencia a lo que se mencionaba anteriormente que es la frecuencia de muestreo la cual es definida por los dispositivos utilizados, para el caso de este laboratorio los dispositivos utilizados cuentan con una frecuencia de muestreo de 48kHz. Finalmente, el data es un arreglo (en este caso bidimensional ya que es estéreo comprobado por la función print dentro del código) en donde se encuentran las amplitudes de la señal de audio para cada muestra.
+
+Así como se mencionó en el postulado de *Formato de audio* este archivo es estéreo ya que el *data* esta en dos dimensiones, es necesario usar únicamente una de sus dos columnas para el tratamiento de este audio, este cambio de estereo a mono se postuló anteriormente. 
+
+*Para el sonido S1*
+
+[![1wav.png](https://i.postimg.cc/s2jtFwDz/1wav.png)](https://postimg.cc/87YyMd6X)
+
+[![s1.png](https://i.postimg.cc/76cwLMLv/s1.png)](https://postimg.cc/cgQV93YT)
+
+Se procede a realizar la conversión del archivo del ruido correspondiente al micrófono 1 el cual al igual que el sonido pasa de MP4 a .wav junto con la selección de una sola columna de audio para pasar de estéreo a mono. Asimismo, con esa línea de osigo se asegura que el archivo nuevo .wav del sonido se guarde igualmente en la carpeta donde se encuentra el proyecto.
+
+*Para el ruido R1*
+
+ Se realiza el mismo procedimiento con el ruido y su respectivo archivo.
+
+ [![ruidowv.png](https://i.postimg.cc/4N07MSfC/ruidowv.png)](https://postimg.cc/XpwYBxBx)
+
+ [![lenR1.png](https://i.postimg.cc/76qf0vVz/lenR1.png)](https://postimg.cc/TyHdv4B2)
+
+ Es importante tener en cuenta que al trabajar un archivo .wav la unidades que éste contiene son unidades adimensionales por lo tanto, es necesario realizar un vector de tiempo con el objetivo de asociar esos valores a una unidad física por cada una de las muestras durante un intervalo de tiempo real que corresponde al eje x  logrando el análisis de la señal a lo largo de un periodo específico identificando los momentos exactos en los que la señal sufre o presenta cambios.
+
+*Vector del tiempo para el sonido 1 (TS1)*                            	
+
+[![TS1.png](https://i.postimg.cc/qqwf3sJM/TS1.png)](https://postimg.cc/GT4S0sTZ)
+ 
+*Vector del tiempo para el Ruido 1 (TR1)*
+
+[![TR1.png](https://i.postimg.cc/ZYcXjLmJ/TR1.png)](https://postimg.cc/G94MmG9f)
+
+Para el eje y se procede a realizar una normalización con el fin de convertir la amplitud a valores de voltaje con el fin de realizar las operaciones correspondientes al cálculo del SNR para que este tenga una unidad definida y de esta forma tener claro qué unidades se está trabajando con el fin de evitar errores durante el cálculo. Para esto te tuvo en cuenta que los archivos .wav emplean formato PCM de 16 bits por lo cual el rango de la máxima amplitud varía desde -32768 a 32767, con esto en mente se empleó la normalización de voltaje de -1V a 1V.
+
+[![ampli.png](https://i.postimg.cc/qRtM8kKz/ampli.png)](https://postimg.cc/qhTTrHjT)
+
+Una vez teniendo estos dos componentes, es posible graficar a estas señales usando la librería **matplotlib**. En este caso se realizó dos subplot para que el ruido y el sonido  tuvieran el mismo tamaño de la señal ya que en caso de no ser así se mostrará un error el cual tendrá el resultado de la diferencia de las señales.
+
+[![lenvalueerror.png](https://i.postimg.cc/7ZskXFw7/lenvalueerror.png)](https://postimg.cc/CRqXx6ZL)
+
+Seguido a esto se busca que el primer micrófono se encontrará en una misma página presentando así su sonido y ruido correspondientes. Para esto, se realizó el siguiente código:
+
+[![plots1.png](https://i.postimg.cc/qRTcZMsZ/plots1.png)](https://postimg.cc/1gvN8SYp)
+
+Obteniendo así la siguiente figura:
+
+[![grafs1.png](https://i.postimg.cc/Y0hCkQkn/grafs1.png)](https://postimg.cc/N2vck9Km)
+
+Con esto se observa que la gráfica correspondiente al sonido 1 y ruido 1 presentan valores en milivoltios dentro de la escala normalizada.
+
+**Variabilidad:** La señal del sonido muestra una variabilidad considerable a lo largo del tiempo, lo que es típico en señales de audio donde diferentes sonidos o voces pueden estar presentes. La amplitud no es constante, lo que indica dinámicas en la fuente de sonido.
+
+**Tiempo:** Al igual que la onda de sonido, esta gráfica también se extiende a lo largo de 30 segundos, mostrando niveles de ruido consistentes aparte del pico mencionado.
+
+**Comparación de amplitudes:** La onda de sonido tiene una amplitud diez veces mayor que la onda de ruido en la mayoría de los puntos, lo que es favorable para la claridad del sonido.
+
+
+### Calculo de SNR
+
+Para esto, se define al SNR (relación señal-ruido) como una medida la cual permite calcular y determinar en una señal si hay más ruido que información de la señal o viceversa, mediante la siguiente fórmula.  
+
+ [![SNR.png](https://i.postimg.cc/BZwNcFYm/SNR.png)](https://postimg.cc/bdkQqZjn)
+
+Y para calcular la potencia de cada señal, se realizaba mediante: 
+
+[![potencia.png](https://i.postimg.cc/xjgWzgbh/potencia.png)](https://postimg.cc/LhYCdtD3)
+
+Donde: 
+
+P = Potencia  
+
+n = es la longitud de la señal adquirida (la longitud del ruido debe ser igual a la de la señal original).     
+
+A partir del resultado de SNR obtenido se determina que, si es un valor positivo, hay más información de la señal que ruido. Mientras que, si es un valor negativo, indica que hay más ruido en la señal contaminada que información importante. 
+
+[![snrmayoa.png](https://i.postimg.cc/v80Gs5b7/snrmayoa.png)](https://postimg.cc/YjL5NG4j)
+
+
+Teniendo en cuenta las fórmulas presentadas anteriormente se implementan dentro del código con el fin de obtener el SNR entre la señal que contiene las voces su ruido balnco el cual fue grabado mediante el mismos dispositivo  y ubicado en la misma posición con el fin de lograra una mayor exactitud en el análisis del audio 
+
+#### Potencia y señal del ruido:
+
+##### Microfono 1 
+
+[![potysnrrys.png](https://i.postimg.cc/bJJ2RkPz/potysnrrys.png)](https://postimg.cc/sBkXjB18)
+
+Calculo del SNR:
+
+[![snrmic1.png](https://i.postimg.cc/qMw55dVj/snrmic1.png)](https://postimg.cc/6y7c8gQv)	
+
+Mediante este código se obtuvieron diferentes potencias de la señal y ruido para cada uno de los micrófonos con su correspondiente SN aplicado para cada uno de los micrófonos:
+Calculo de SNR microfono 1
+
+Potencia S1: 0.0019
+
+Potencia R1: 0.00000016793
+
+SNR mic 1: 40.5714 dB
+
+Del micrófono 1 se puede determinar que hay más información de la señal que el ruido en ella debido a que su SNR es positivo y mayor a 10 dB indicando una buena calidad de audio.
+
+##### Resultados para el micrófono 2: 
