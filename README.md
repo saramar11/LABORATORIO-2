@@ -67,3 +67,13 @@ Teniendo en cuenta que estos audios fueron grabados mediante aparatos electróni
 
 Se usaron estos nuevos archivos de sonido MP4 con el mismo valor de tiempo y se ingresaron al código con el fin de convertirlos al formato *.wav*. Anteriormente se estaban convirtiendo estos archivos mediante sitios web, donde se probaron múltiple con el fin de identificar si era influyente esta conversión en los resultados obtenidos. Finalmente, se optó por convertirlos dentro del mismo código de python mediante el uso de la librería  correspondiente, mencionada anteriormente.
 
+Para verificar estos datos dentro del código se realizó una serie de líneas de código las cuales extraían la información correspondiente de cada audio utilizado. 
+
+[![infos1.png](https://i.postimg.cc/GpBgNqWH/infos1.png)](https://postimg.cc/DWTc4dyT) 
+
+Obteniendo así la siguiente información correspondiente al audio captado por el primer micrófono:
+
+[![infobasicas1.png](https://i.postimg.cc/KjVbMJgL/infobasicas1.png)](https://postimg.cc/bSQ4X0gN)
+
+A partir de esto se puede observar que en primera instancia la frecuencia de muestreo de este audio es de 44100 Hz así como se había mencionado anteriormente. También es evidente que los datos de este audio están almacenados en una matriz bidimensional de dos columnas con un total de 1324323 de datos, el hecho de que sea bidimensional implica que este archivo es estéreo, es decir que utiliza dos canales de sonido para crear una sensación de espacialidad en el audio. Sin embargo, para este procesamiento es necesario utilizar únicamente un solo canal, es decir volverlo un audio mono. Para esta finalidad se utilizaron las siguientes líneas de código, así mismo, por medio de mensajes mostrados en la ventana se puede evidenciar si se convirtió de estéreo a mono satisfactoriamente.
+
