@@ -133,7 +133,7 @@ Seguido a esto se busca que el primer micrófono se encontrará en una misma pá
 
 Obteniendo así la siguiente figura:
 
-[![grafs1.png](https://i.postimg.cc/Y0hCkQkn/grafs1.png)](https://postimg.cc/N2vck9Km)
+[![Figure-1of.png](https://i.postimg.cc/9FgS7dD2/Figure-1of.png)](https://postimg.cc/gnRN96yt)
 
 Con esto se observa que la gráfica correspondiente al sonido 1 y ruido 1 presentan valores en milivoltios dentro de la escala normalizada.
 
@@ -189,3 +189,40 @@ SNR mic 1: 40.5714 dB
 Del micrófono 1 se puede determinar que hay más información de la señal que el ruido en ella debido a que su SNR es positivo y mayor a 10 dB indicando una buena calidad de audio.
 
 ##### Resultados para el micrófono 2: 
+
+[![Figure-2of.png](https://i.postimg.cc/W3sSKzdS/Figure-2of.png)](https://postimg.cc/NyP12g7r)
+
+**Relación señal-ruido (SNR) :**1 a partir de las diferencias de amplitud, la señal (sonido) es mucho más fuerte que el ruido, lo que implica una relación señal-ruido (SNR) alta. Una SNR alto.
+
+**Diferencia de amplitud :** La onda sonora tiene variaciones de amplitud mucho mayores en comparación con el ruido, lo que indica que el sonido tiene más energía o es más dominante en la señal general. Es probable que el ruido sea de fondo con menor intensidad.
+
+**Tiempo:** Al igual que la onda de sonido, esta gráfica también se extiende a lo largo de 30 segundos, mostrando niveles de ruido consistentes aparte del pico mencionado.
+
+##### Calculo de SNR microfono 2
+Potencia S2: 0.0004024857
+Potencia R2: 0.0000011568
+SNR mic 2: 25.4149 dB
+En este caso el SNR del micrófono 2 también se encuentra sobre los 10dB esto se podría ser debido a la posición del micrófono junto con la de las voces ya que este se encontraba alejado de los participantes del audio haciendo que la potencia del sonido sea un poco mas baja 
+
+##### Resultados del micrófono 3:
+
+[![Figure-3of.png](https://i.postimg.cc/bv99QPmn/Figure-3of.png)](https://postimg.cc/R3qtBk5C)
+
+**Comparación de amplitudes:** La onda de sonido tiene una amplitud diez veces mayor que la onda de ruido en la mayoría de los puntos, lo que es favorable para la claridad del sonido.
+
+**Eventos notables:** Hay un pico evidente alrededor de los 15 segundos, donde la amplitud del ruido aumenta bruscamente. Este pico puede ser un evento en donde se presento un ruido o sonido mucho más fuerte que el que se presentaba durante el tiempo de grabación.
+
+**Tiempo:** Al igual que la onda de sonido, esta gráfica también se extiende a lo largo de 30 segundos, mostrando niveles de ruido consistentes aparte del pico mencionado.
+
+##### Calculo de SNR microfono 3:
+
+Potencia S3: 0.0006
+
+Potencia R3: 0.0000004179
+
+SNR mic 3: 31.3684748231 dB
+
+Al igual que el caso anterior el SNR de la fuente 3 es superior a los 10 dB, por lo tanto se considera como un valor aceptable en donde hay más información que ruido al comparar las grabaciones de las voces con las del ruido ambiente tomado.
+
+### SEPARACIÓN POR ICA:
+El **ICA:**  (Independent Component Analysis) se usa ICA para separar las señales mezcladas en componentes independientes, para esto se inicia con la lectura de las señales que se desean separar implementando los tres micrófonos los cuales contienen partes de la señal que se desean recuperar teniendolas en cuenta como señales mezcladas (*Mixed*) para cada uno de los micrófonos.
