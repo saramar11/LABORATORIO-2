@@ -388,8 +388,6 @@ Se muestran las tres señales una debajo de la otra para una comparación visual
 
 [![plot-comparison.png](https://i.postimg.cc/jqws8478/plot-comparison.png)](https://postimg.cc/rzTXsWgW)
 
-Finalmente obteniendo:
-
 Obteniendo finalmente:
 
 [![Figure-comparacion-senals.png](https://i.postimg.cc/59CV59hT/Figure-comparacion-senals.png)](https://postimg.cc/XX4m4W7k)
@@ -449,6 +447,42 @@ Similar a la Fuente 1, la media y la mediana son muy cercanas a cero, indicando 
 
 Al igual que las otras dos fuentes, la media es muy cercana a cero. La mediana es un poco mayor que en las otras fuentes, pero aún así, bastante baja.
 
+**Conclusiones Temporales:**
+
+- **Amplitud:** Las señales tienen una amplitud considerable, con valores máximos y mínimos que sugieren variabilidad significativa. Las diferencias entre los máximos y mínimos en cada señal pueden indicar la intensidad del audio.
+- **Centro de la señal:** La media cercana a cero en todas las señales indica que la señal está centrada alrededor de cero.
+- **Mediana:** La mediana baja en todas las señales sugiere que la mayoría de los datos están cerca del centro. Las pequeñas diferencias en la mediana pueden indicar ligeras diferencias en la distribución de la señal entre las diferentes fuentes.
+
+#####Estadísticas Espectrales:
+
+1. **Fuente 1 (Espectral):**
+- **Máximo:** 0.0431
+- **Mínimo:** 1.8779e-17 (cero)
+- **Media:** 0.0004
+- **Mediana:** 8.0762e-11 (cero)
+  
+La media de las magnitudes espectrales es bastante baja, indicando que la mayor parte de la energía de la señal está concentrada en frecuencias de baja amplitud. El máximo en el espectro sugiere la presencia de una frecuencia dominante en la señal.
+
+- **Fuente 2 (Espectral):**
+- **Máximo:** 0.0747
+- **Mínimo:** 1.3145e-17 (prácticamente cero)
+- **Media:** 0.0004
+- **Mediana:** 7.5222e-11 (prácticamente cero)
+  
+Similar a la Fuente 1, la media es baja y el máximo indica una frecuencia dominante en el espectro. La diferencia principal es que el máximo es mayor, lo que sugiere una mayor amplitud en algunas frecuencias comparado con la Fuente 1.
+
+3. **Fuente 3 (Espectral):**
+- **Máximo:** 0.0507
+- **Mínimo:** 4.3781e-18 (prácticamente cero)
+- **Media:** 0.0004
+- **Mediana:** 8.6092e-11 (prácticamente cero)
+
+Los resultados son similares a los de las otras fuentes espectrales. La media es baja y el máximo es intermedio entre las otras dos fuentes, indicando variabilidad en la amplitud de las frecuencias.
+
+**Conclusiones Espectrales:**
+- **Amplitud espectral:** Las señales muestran una magnitud máxima en el espectro que varía entre 0.0431 y 0.0747. Esto indica la presencia de ciertas frecuencias dominantes que tienen una amplitud significativamente mayor en comparación con la mayoría de las otras frecuencias.
+- **Energía promedio y mediana:** La media y mediana bajas sugieren que la energía de la señal está distribuida en frecuencias con bajas magnitudes en general. La mediana extremadamente baja indica que la mayoría de las frecuencias tienen magnitudes muy bajas, lo que es típico si solo unas pocas frecuencias dominan el espectro.
+- **Comparación entre fuentes:** Las diferencias en los valores máximos espectrales sugieren que las fuentes tienen diferentes niveles de intensidad en sus componentes de frecuencia.
 
 ### SNR de la senal recuperada
 
@@ -482,4 +516,9 @@ Resultado:
 
 
 De este SNR obtenido se aprecia que se encuentra con un valor positivo que indica que hay más información que ruido en este audio, y es superior a 10 dB lo cual como se ha postulado a lo largo del reporte significa que es válida utilizarla. 
+
+## Conclusiones generales del laboratorio 
+
+- **Análisis Temporal:** Todas las señales están centradas alrededor de cero y tienen variabilidad significativa en términos de amplitud. Las señales tienen una pequeña mediana, indicando que la mayoría de los valores están cerca del centro.
+- **Análisis Espectral:** La energía en el dominio de la frecuencia es baja en promedio, pero hay algunas frecuencias dominantes con altas magnitudes. Las diferencias en el máximo espectral entre las fuentes indican variaciones en la intensidad de la señal y en el dominio de la frecuencia.
 
