@@ -1,3 +1,7 @@
+*Autoras: Mariana Garcia & Sara Mariana Pinzon*
+
+**NOTA: Es necesario antes de correr el código tener guardados todos los archivos que se encuentran en el Github, especialmente los de audio. De lo contrario el código no funcionará**
+
 # LABORATORIO-2
 
 Para el siguiente laboratorio se instalaron tres micrófonos en distintas partes inicialmente de una sala insonorizada. En primera instancia se realizó una grabación simultánea entre los tres micrófonos del ruido ambiente de la sala, y posterior a ellos se grabó de la misma duración una recreación de fiesta de cóctel, en donde tres personas se encuentran hablando al mismo tiempo. Para este laboratorio se elaboró un código el cual permite filtrar una única voz dentro de las tres voces que se escuchan.
