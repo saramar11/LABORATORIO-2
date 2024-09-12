@@ -285,11 +285,172 @@ Se escala la señal para que su valor máximo absoluto sea 32767, lo que es típ
 
 [![writey.png](https://i.postimg.cc/Vvh6SKpT/writey.png)](https://postimg.cc/YL1kZzpf)
 
+### Gráfica de las señales en el dominio espectral y temporal
+
+Estas son el resultado del código utilizado anteriormente para la separación por ICA.Se generan las gráficas de las tres fuentes resultantes da la separación por ICA, estas al estar en un archivo .wav estas representadas en función del número de muestras en el eje ** x**  y amplitud en el eje **y** las cuales como se mencionó anteriormente son unidades adimensionales.
+
+Cada **plt.subplot(3, 1, n)** crea un gráfico para una de las fuentes separadas (n = 1, 2, 3). Y **plt.tight_layout()** asegura que los gráficos no se superponen y están bien organizados. Esto con el fin de visualizar el comportamiento de la señal en el dominio temporal.
+
+Nuevamente es necesario aplicar la normalización correspondiente a los datos guardados en el archivo.wav con el fin de realizar el análisis temporal de los sonidos en función del tiempo y del voltaje.
+
+[![AenV.png](https://i.postimg.cc/hP65PVy5/AenV.png)](https://postimg.cc/ykhPL3zm)
+
+Esta función convierte las amplitudes de las señales separadas (que están en formato numérico) a valores de voltaje. Se basa en la profundidad de bits del archivo de audio (en este caso, 16 bits). Para un archivo de audio de 16 bits, el valor máximo de amplitud es 32768.
+
+Se genera el vector de tiempo mediante la función **generate_time_vector** para analizar la señal en función del tiempo, el vector de tiempo en función de la longitud de la señal y la frecuencia de muestreo (sample rate). El tiempo se calcula como la cantidad de muestras dividida por la frecuencia de muestreo, lo que nos da el tiempo total en segundos para cada muestra.
 
 
+[![Vtemp.png](https://i.postimg.cc/k5dYWqdN/Vtemp.png)](https://postimg.cc/87tbS8cs)
+
+Finalmente se obtiene la gráfica del análisis temporal de los sonidos mediante:
+
+[![graftempo.png](https://i.postimg.cc/RCjYvcbb/graftempo.png)](https://postimg.cc/hh1sr7n9)
+
+Para obtener las siguientes gráficas:
+
+[![Figura-analisis-temporal.png](https://i.postimg.cc/tgTk3TMx/Figura-analisis-temporal.png)](https://postimg.cc/872LD1Dp)
+
+**1. Fuente 1 (Voltaje vs Tiempo):**
+- La señal es constante en su magnitud a lo largo del tiempo, aunque presenta algunas variaciones en las amplitudes de picos y valles.
+- Los valores de voltaje varían entre -0.0002 V y 0.0002 V.
+
+**2. Fuente 2 (Voltaje vs Tiempo):**
+- Esta señal tiene un comportamiento más variable en comparación con la Fuente 1. Al principio, presenta mayores variaciones de amplitud y presenta mas ruido hasta el segundo 15, después de lo cual tiende a estabilizarse. 
+- Los valores de voltaje están dentro de un rango similar, pero las variaciones al principio son más grandes, lo que podría indicar una señal más intensa o con más componentes de alta frecuencia en los primeros segundos.
+
+**3. Fuente 3 (Voltaje vs Tiempo):**
+- La señal de la Fuente 3 también muestra variaciones notables en amplitud, pero sus picos son más pequeños en comparación con las dos primeras fuentes.
+- Hay varias oscilaciones que podrían estar asociadas con componentes de frecuencia más baja o con eventos que ocurren de forma más periódica pero menos intensa en términos de amplitud.
+
+Al visualizar estas señales se procede a normalizarlas nuevamente las señales ubicadas en el .wav para convertir los valores adimensionales a magnitudes físicas que se puedan operar como lo es el voltaje para el eje **y** el tiempo en el eje **x** esto dentro del rango - 1 a 1   voltios.
+
+[![normidevltaje.png](https://i.postimg.cc/C5Yf4rxQ/normidevltaje.png)](https://postimg.cc/jwg5xXNH)
+
+Se utiliza la función para graficar los espectros para esto se requiere convertir las desde el dominio del tiempo a el dominio de la frecuencia haciendo uso de la transformada rápida de fourier (FFT) con el fin de una mejor interpretación dentro de las frecuencias (bajos, agudos entre otras) 
+
+[![fxdeespectro.png](https://i.postimg.cc/kgVDWPy5/fxdeespectro.png)](https://postimg.cc/0zs8q3Fg)
+
+En donde:
+
+- **np.fft.fft(signal):** Calcula la transformada rápida de Fourier para obtener las componentes de frecuencia de la señal.
+
+- **np.fft.fftfreq(n, 1/sample_rate):** Genera las frecuencias correspondientes a los valores de la FFT.
+
+- **magnitudes[1:n//2] *= 2:** Dado que la FFT devuelve tanto las frecuencias positivas como las negativas, esta línea duplica las magnitudes de las frecuencias positivas (excepto el componente de frecuencia cero).
+
+- **plt.semilogx(...):** Gráfica las magnitudes de las frecuencias en escala logarítmica para visualizar mejor el espectro de frecuencias.
+
+Al analizar la señal en el dominio de la frecuencia se puede visualizar las diferentes frecuencias que se encuentran dentro de la señal separada.
+
+#### Gráfica de la señal espectral
+
+Se utiliza la función **plot_spectrum** para graficar las tres señales separadas en el dominio de la frecuencia.  Obteniendo:
+
+[![figure-dominio-espectra-sepatadas.png](https://i.postimg.cc/wvxpchdk/figure-dominio-espectra-sepatadas.png)](https://postimg.cc/QBzwjKCB)
+
+Gráfica el espectro de cada una de las tres fuentes separadas en frecuencias (espectro de magnitudes).Cada gráfico muestra cómo las frecuencias están distribuidas dentro de la señal en el eje x (frecuencia en Hz) y el eje y (magnitud o voltaje). De esta forma se observa cuales son las frecuencias que predominan en cada una de las señales separadas.
+
+En donde se obtiene:
+
+[![figure-expetral-separadas-frec.png](https://i.postimg.cc/SNYprSHH/figure-expetral-separadas-frec.png)](https://postimg.cc/Cz0tMgh4)
+
+En donde:
 
 
-###SNR de la senal recuperada
+**Fuente 1 (Espectral)**
+- El espectro de esta señal tiene picos prominentes en la región de frecuencias entre 10¹ (10 Hz) y 10³ (1,000 Hz), con algunos picos más pequeños en torno a 10⁴ Hz (10,000 Hz).
+- La mayor parte de la energía de la señal parece estar concentrada entre 100 y 1,000 Hz, lo que podría corresponder a componentes en donde el sonido fue mas fuerte dentro de estos rangos.
+  
+**Fuente 2 (Espectral)**
+- En esta señal, se observa una concentración de energía alrededor de los mismos rangos, pero con un pico principal más marcado en el rango de 100 a 500 Hz.
+- Tiene menos contenido en las frecuencias más altas en comparación con la Fuente 1, lo que sugiere que podría corresponder a una señal más simple o con menos armónicos presentes.
+
+**Fuente 3 (Espectral)**
+- El espectro de la Fuente 3 es algo similar al de la Fuente 1, con una alta densidad de energía entre 10¹ (10 Hz) y 10³ Hz (1,000 Hz).
+- Se observan varios picos entre 100 Hz y 2,000 Hz, lo que sugiere que esta señal también tiene componentes de frecuencias medias.
+- En general, parece más compleja que la Fuente 2, pero menos que la Fuente 1 en términos de distribución de picos.
+
+#### Comparación entre las señales procesadas de un solo microfono (senal original mezclada y recuperada correspondientes al micrófono 3)
+
+Se hace uso de la función **plot_comparison(original, mixed, recovered, sample_rate)** la cual compara visualmente el espectro de frecuencia de tres señales: la señal original, la señal mezclada y la señal recuperada.
+
+Para cada señal (original, mezclada y recuperada), se normaliza utilizando **normalize_signal.**
+
+Luego se grafica el espectro de cada una de estas señales utilizando la función **plot_spectrum.**
+
+Se muestran las tres señales una debajo de la otra para una comparación visual directa entre la señal original con la señal mezclada y la señal recuperada utilizando ICA, para esto Se normaliza cada señal y luego se grafica su espectro de frecuencia.l Este análisis es útil para evaluar la efectividad del proceso de separación de señales (por ejemplo, usando técnicas como el ICA), demostrando que la mayor parte de la información original se ha mantenido en la señal recuperada, en donde:
+
+1. Se convierte la amplitud a voltaje para las señales separadas y se grafica en función del tiempo.
+
+2. Se normalizan las señales para graficar su espectro en función de la frecuencia.
+
+3. Se comparan las señales originales, mezcladas y recuperadas tanto en el dominio temporal como en el espectral.
+
+[![plot-comparison.png](https://i.postimg.cc/jqws8478/plot-comparison.png)](https://postimg.cc/rzTXsWgW)
+
+Finalmente obteniendo:
+
+Obteniendo finalmente:
+
+[![Figure-comparacion-senals.png](https://i.postimg.cc/59CV59hT/Figure-comparacion-senals.png)](https://postimg.cc/XX4m4W7k)
+
+**1. Señal Original**
+- **Eje X (Frecuencia en Hz):** La señal original presenta varios picos prominentes en el rango de frecuencias de 10² (100 Hz) a 10³ Hz (1,000 Hz), con algunos picos más débiles más allá de 10³ Hz.
+- **Eje Y (Voltaje en V):** La amplitud máxima de la señal está en el rango de 0.006 V, con la mayor parte de la energía distribuida en el rango entre 100 Hz y 1,000 Hz.
+- **Análisis:** La señal original tiene un comportamiento complejo con múltiples componentes frecuenciales en el rango de 100 Hz a 1,000 Hz. Estos picos sugieren que hay varias frecuencias importantes, lo que indica una señal con varias componentes o armónicos.
+  
+**2. Señal Mezclada**
+- **Eje X (Frecuencia en Hz):** La señal mezclada tiene una estructura espectral similar a la señal original, pero con una mayor amplitud en las bajas frecuencias (cercanas a 100 Hz).
+
+- **Eje Y (Voltaje en V):** La señal mezclada también alcanza picos de alrededor de 0.006 V. Sin embargo, la energía se ha distribuido de manera ligeramente distinta, con las frecuencias más bajas teniendo mayor prominencia.
+- **Análisis:** El hecho de que la señal mezclada mantiene muchas características de la señal original pero con mayor presencia en las frecuencias bajas podría ser indicativo de cómo varias señales han sido combinadas o sumadas. Esto sugiere la interferencia de otras señales de baja frecuencia.
+  
+**3. Señal Recuperada**
+- **Eje X (Frecuencia en Hz):** La señal recuperada muestra una estructura espectral que se asemeja a la señal original, con picos principales alrededor de los mismos rangos de frecuencia (100 Hz a 1,000 Hz). Sin embargo, hay algunas diferencias en la distribución exacta de la energía.
+- **Eje Y (Voltaje en V):** La señal recuperada presenta picos de hasta 0.006 V, al igual que la señal original. Sin embargo, hay una ligera caída en las amplitudes en las frecuencias más altas.
+- **Análisis:** La señal recuperada parece haber capturado la mayoría de las características clave de la señal original, ya que este micrófono se encontraba en medio de la habitación. Esto indica que el proceso de recuperación ha sido eficaz en retener la mayor parte de la información original, aunque podría haber alguna pérdida o distorsión en las frecuencias más altas.
+
+**Comparación General:**
+- Las tres señales muestran similitudes significativas en cuanto a los picos de frecuencia más importantes, especialmente en el rango de 100 Hz a 1,000 Hz, lo que indica que las características fundamentales de la señal original han sido preservadas tanto en la mezcla como en la recuperación.
+- La señal mezclada tiene una mayor presencia de bajas frecuencias, lo que es común en las señales mezcladas donde múltiples fuentes pueden estar interfiriendo.
+- La señal recuperada ha logrado retener la mayor parte de la estructura de la señal original, lo que indica que el proceso de separación y recuperación ha sido exitoso, aunque podría haber cierta pérdida o alteración de los componentes más sutiles en las frecuencias altas.
+
+#### Cálculos de estadísticas (características de las señales temporales y espectrales)
+
+La función **calcular_estadisticas**calcula y muestra estadísticas básicas sobre una señal Para este caso se decidió analizar los puntos máximos, mínimos la media y la mediana de cada una de las señales que se encuentran en el análisis temporal y espectral con el fin de entender el comportamiento de las misma en función de la frecuencia y el tiempo.
+
+[![calculos-estadisticos-codigo.png](https://i.postimg.cc/PJ4KbwT1/calculos-estadisticos-codigo.png)](https://postimg.cc/N2K1BLy0)
+
+Dando como resultados:
+
+##### Estadísticas Temporales
+
+1. **Fuente 1 (Temporal):**
+- **Máximo:** 6.5467
+- **Mínimo:** -7.1606
+- **Media:** 1.922e-17 (prácticamente cero)
+- **Mediana:** 0.0135
+
+La media cercana a cero indica que la señal está centrada alrededor del cero. La mediana es muy baja, lo que indica que la mayoría de los valores de la señal están cerca de cero, aunque hay algunas oscilaciones notables (máximo y mínimo bastante altos).
+
+2. **Fuente 2 (Temporal):**
+- **Máximo:** 6.2538
+- **Mínimo:** -6.1142
+- **Media:** 1.3002e-17 (cero)
+- **Mediana:** 2.3084e-05 (cero)
+
+Similar a la Fuente 1, la media y la mediana son muy cercanas a cero, indicando que la señal está equilibrada alrededor del cero. Sin embargo, la mediana es más cercana a cero que en la Fuente 1, lo que sugiere menos variabilidad en torno a cero.
+
+3. **Fuente 3 (Temporal):**
+- **Máximo:** 6.9160
+- **Mínimo:** -7.0647
+- **Media:** 4.9482e-18 (prácticamente cero)
+- **Mediana:** 0.0038
+
+Al igual que las otras dos fuentes, la media es muy cercana a cero. La mediana es un poco mayor que en las otras fuentes, pero aún así, bastante baja.
+
+
+### SNR de la senal recuperada
 
 Una vez ya se realizó el procedimiento de la separación de la voz mediante la mezcla de los tres audios usando ICA, se utilizó el audio de la fuente en donde se escucha con mayor nitidez una única voz entre las tres personas presentes en la habitación siendo esta *fuente 3* la cual según lo estipulado por el código es el correspondiente al micrófono 3, con el ruido captado desde el inicio con este micrófono *voltajer3*. Cabe resaltar que en esta señal recuperada la voz que se escucha con mayor nitidez corresponde a la persona que inicialmente se considera como **S1** en el esquemático presentado al inicio, lo cual significa que se encontraba al otro lado de la habitación.
 
