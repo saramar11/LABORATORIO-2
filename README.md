@@ -521,4 +521,10 @@ De este SNR obtenido se aprecia que se encuentra con un valor positivo que indic
 
 - **Análisis Temporal:** Todas las señales están centradas alrededor de cero y tienen variabilidad significativa en términos de amplitud. Las señales tienen una pequeña mediana, indicando que la mayoría de los valores están cerca del centro.
 - **Análisis Espectral:** La energía en el dominio de la frecuencia es baja en promedio, pero hay algunas frecuencias dominantes con altas magnitudes. Las diferencias en el máximo espectral entre las fuentes indican variaciones en la intensidad de la señal y en el dominio de la frecuencia.
+- Finalmente gracias a los valores de SNR obtenidos se puede identificar que si es positivo indica que hay más información que ruido en la señal del audio que está siendo analiza también gracias a los audios que fueron obtenidos a partir de la señal recuperada, adicionalmente que si su valor se encuentra por encima de 10 dB se considera como un audio útil y válido para poder trabajar con el.
+- El ICA es una herramienta que por medio de descomposición de componentes independientes, y la transformación rápida de fourier dentro él, es posible obtener una única voz entre una sala con múltiples personas hablando al mismo tiempo mediante el uso de varios micrófonos, para este caso 3 en total.
+- Los diagramas espectrales identifican el comportamiento de las frecuencias en el audio mientras que el temporal es una gráfica el cual permite visualizar la forma de onda del sonido en torno a la amplitud que tuvo en unidades de voltaje en función del tiempo durante el cual estuvo grabando, es decir que tan fuerte fue el sonido.
+- Gracias a la comparación que se realiza por medio de las señal original, mezclada y recuperada se demuestra que la información original se mantiene en su mayor parte en la señal recuperada obtenida después del ICA.
+- Mediante el diagrama espectral de cada una de las fuentes por separado, se puede denotar que las frecuencias de las voces se encuentran en un intervalo similar en las tres fuentes en su frecuencia, y la amplitud representada en voltaje representa que tan agudo fue.
+
 
